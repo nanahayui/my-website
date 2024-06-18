@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import Layout from '../../layouts/Layout.astro'
 import Prose from '../../components/Prose.astro'
+import { Icon } from 'astro-icon/components'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog')
@@ -17,6 +18,17 @@ const { Content } = await entry.render()
 
 <Layout title={entry.data.title}>
   <Prose>
-    <Content />
+    <div class="my-10 space-y-1">
+      <div class="animate text-4xl font-bold text-black">タイトル</div>
+      <div class="animate flex items-center gap-1.5">
+        <Icon name="mdi:edit" />
+        <div class="font-base text-sm">2024-01-01</div>
+        <Icon name="mdi:update" />
+        <div class="font-base text-sm">2024-01-01</div>
+      </div>
+    </div>
+    <article class="animate">
+      <Content />
+    </article>
   </Prose>
 </Layout>
