@@ -1,8 +1,7 @@
 ---
-import dayjs from 'dayjs'
+import FormattedDate from './FormattedDate.astro'
 
 const { title, date, category, slug } = Astro.props
-const formatedDate = dayjs(date).format('YYYY-MM-DD')
 ---
 
 <div class="m-4">
@@ -13,7 +12,9 @@ const formatedDate = dayjs(date).format('YYYY-MM-DD')
       </a>
       <div class="mt-4 flex justify-between">
         <span class="rounded-full bg-gray-200 px-3 py-1 text-xs text-gray-700"> {category} </span>
-        <time class="text-sm text-slate-500" datetime="2024-01-01"> {formatedDate} </time>
+        <div class="text-sm text-slate-500">
+          <FormattedDate date={date} />
+        </div>
       </div>
     </div>
   </ul>
