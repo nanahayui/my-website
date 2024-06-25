@@ -1,19 +1,19 @@
 ---
+import dayjs from 'dayjs'
 
+const { title, date, category, slug } = Astro.props
+const formatedDate = dayjs(date).format('YYYY-MM-DD')
 ---
 
 <div class="m-4">
   <ul>
     <div class="flex flex-col rounded border border-gray-300 p-4">
-      <a href={`/blog/note/sample`}>
-        <h2 class="text-xl font-bold">タイトル</h2>
+      <a href={`/blog/${slug}`}>
+        <h2 class="text-xl font-bold">{title}</h2>
       </a>
-      <p class="mt-4 text-sm text-slate-400">
-        この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れ
-      </p>
       <div class="mt-4 flex justify-between">
-        <span class="rounded-full bg-gray-200 px-3 py-1 text-xs text-gray-700"> カテゴリ </span>
-        <time class="text-sm text-slate-500" datetime="2024-01-01"> 2024-01-01 </time>
+        <span class="rounded-full bg-gray-200 px-3 py-1 text-xs text-gray-700"> {category} </span>
+        <time class="text-sm text-slate-500" datetime="2024-01-01"> {formatedDate} </time>
       </div>
     </div>
   </ul>
