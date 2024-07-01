@@ -1,6 +1,13 @@
 ---
 import FormattedDate from './FormattedDate.astro'
 
+interface Props {
+  title: string
+  date: Date
+  category: string
+  slug: string
+}
+
 const { title, date, category, slug } = Astro.props
 ---
 

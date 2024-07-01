@@ -1,0 +1,58 @@
+---
+import type { GetStaticPathsOptions } from 'astro'
+import { getCollection } from 'astro:content'
+import Layout from '../../../layouts/Layout.astro'
+import { Icon } from 'astro-icon/components'
+import BlogCard from '../../../components/BlogCard.astro'
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const blogEntries = await getCollection('blog')
+  return paginate(blogEntries, { pageSize: 10 })
+}
+const { page } = Astro.props
+---
+
+<Layout title="Welcome to Astro." description="index">
+  <h2 class="my-8 text-xl font-bold">ブログ一覧</h2>
+
+  <ul>
+    {
+      page.data.map((blogPostEntry) => (
+        <BlogCard
+          title={blogPostEntry.data.title}
+          category={blogPostEntry.data.category}
+          date={blogPostEntry.data.date}
+          slug={blogPostEntry.slug}
+        />
+      ))
+    }
+  </ul>
+
+  <nav class="my-4 flex items-center justify-center">
+    <div class="p-4">
+      {
+        page.url.prev ? (
+          <a href={page.url.prev}>
+            <Icon name="mdi:navigate-before" class="text-2xl" />
+          </a>
+        ) : (
+          <div class="h-6 w-6" />
+        )
+      }
+    </div>
+    <div class="p-4 text-lg">
+      {page.currentPage} / {page.lastPage}
+    </div>
+    <div class="p-4">
+      {
+        page.url.next ? (
+          <a href={page.url.next}>
+            <Icon name="mdi:navigate-next" class="text-2xl" />
+          </a>
+        ) : (
+          <div class="h-6 w-6" />
+        )
+      }
+    </div>
+  </nav>
+</Layout>
