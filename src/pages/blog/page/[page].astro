@@ -6,8 +6,15 @@ import { Icon } from 'astro-icon/components'
 import BlogCard from '../../../components/BlogCard.astro'
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const blogEntries = await getCollection('blog')
-  return paginate(blogEntries, { pageSize: 10 })
+  const blogPosts = await getCollection('blog')
+
+  const sortedPosts = blogPosts.sort((a, b) => {
+    const aDate = new Date(a.data.date)
+    const bDate = new Date(b.data.date)
+    return bDate.getTime() - aDate.getTime()
+  })
+
+  return paginate(sortedPosts, { pageSize: 10 })
 }
 const { page } = Astro.props
 ---
@@ -17,12 +24,12 @@ const { page } = Astro.props
 
   <ul>
     {
-      page.data.map((blogPostEntry) => (
+      page.data.map((post) => (
         <BlogCard
-          title={blogPostEntry.data.title}
-          category={blogPostEntry.data.category}
-          date={blogPostEntry.data.date}
-          slug={blogPostEntry.slug}
+          title={post.data.title}
+          category={post.data.category}
+          date={post.data.date}
+          slug={post.slug}
         />
       ))
     }
