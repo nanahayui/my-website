@@ -1,0 +1,119 @@
+---
+title: 'Markdown記法の確認用'
+description: 'Markdownが問題なく表示されているかを確認'
+category: 'Tech'
+date: '2024-07-01'
+---
+
+## 見出し
+# h1
+## h2
+### h3
+#### h4
+##### h5
+###### h6
+
+## 強調・斜体・打ち消し線
+**sample1**
+
+*sample2*
+
+~~sample3~~
+
+## 順序なしリスト
+- sample1
+  - sample2
+    - sample3
+
+## 番号付きリスト
+1. sample1
+2. sample2
+3. sample3
+
+## 説明リスト
+<dl>
+  <dt>リンゴ</dt>
+  <dd>赤いフルーツ</dd>
+  <dt>オレンジ</dt>
+  <dd>橙色のフルーツ</dd>
+</dl>
+
+## チェックボックス
+- [ ] sample1
+- [x] sample2
+
+## 折りたたみ
+<details>
+<summary>閉じている</summary>
+
+折りたたまれたテキスト
+</details>
+
+<details open>
+<summary>開いている</summary>
+
+折りたたまれたテキスト
+</details>
+
+## 引用
+> 引用文
+> > ネストした引用文
+
+## 区切り線
+区切り前
+
+---
+
+区切り後
+
+## リンク
+[タイトルあり](https://www.google.com/ "サイトタイトル")
+
+[タイトルなし](https://www.google.com/)
+
+[リンク1][link] 、 [リンク2][link] は同じ
+
+[link]: https://www.google.com/
+
+## 画像
+素材はぱくたそより
+
+public
+![grass](../../../../../public/grass.jpg)
+src
+![grass](../../../../../src/assets/images/grass.jpg)
+
+## テーブル
+| Left    | Center  |   Right |
+| :------ | :-----: | ------: |
+| sample1 | sample1 | sample1 |
+| sample2 | sample2 | sample2 |
+| sample3 | sample3 | sample3 |
+
+
+## コードブロック
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>My test page</title>
+</head>
+<body>
+  ハイライトなし
+</body>
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>My test page</title>
+</head>
+<body>
+  ハイライトあり
+</body>
+</html>
+```
