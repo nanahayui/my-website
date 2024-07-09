@@ -19,7 +19,9 @@ const { Content } = await entry.render()
 <Layout title={entry.data.title} description={entry.data.description}>
   <Prose>
     <div class="my-10">
-      <div class="text-4xl font-bold">{entry.data.title}</div>
+      <div class="text-4xl font-bold [word-break:auto-phrase] sm:text-2xl">
+        {entry.data.title}
+      </div>
       <div class="mt-4">
         <FormattedDate date={entry.data.date} />
       </div>
