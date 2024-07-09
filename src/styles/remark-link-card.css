@@ -25,14 +25,10 @@
     font-weight: normal;
 
     grid-column: 1;
-    padding: 0 1.2rem;
+    padding: 0.7em 1em;
     max-width: 100%;
     min-width: 100%;
     border-radius: var(--border-radius) 0 0 var(--border-radius);
-
-    @media (min-width: 480px) {
-      padding: 0.7em 1em;
-    }
 
     .rlc-title {
       font-size: 1rem;
