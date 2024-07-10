@@ -1,68 +1,70 @@
 .rlc-container {
   --border-radius: calc(0.5rem - 1px);
-  border: 1px solid var(--tw-prose-hr);
-  border-radius: calc(var(--border-radius) + 1px);
-  text-decoration: none;
-  width: 100%;
-  margin-bottom: 1.66em;
-
-  transition: background-color 150ms;
-  &:hover {
-    background-color: #f0f9ff;
-  }
 
   display: grid;
   grid-template-columns: 1fr 116px;
   gap: 1rem;
-  @media (min-width: 480px) {
+  width: 100%;
+  margin-bottom: 1.66em;
+  text-decoration: none;
+  border: 1px solid var(--tw-prose-hr);
+  border-radius: calc(var(--border-radius) + 1px);
+  transition: background-color 150ms;
+
+  &:hover {
+    background-color: #f0f9ff;
+  }
+
+  @media (width >= 480px) {
     grid-template-columns: 1fr 220px;
   }
 
   .rlc-info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    font-weight: normal;
-
     grid-column: 1;
-    padding: 0.7em 1em;
-    max-width: 100%;
+    justify-content: center;
     min-width: 100%;
+    max-width: 100%;
+    padding: 0.7em 1em;
+    font-weight: normal;
     border-radius: var(--border-radius) 0 0 var(--border-radius);
 
     .rlc-title {
+      display: -webkit-box;
+      overflow: hidden;
       font-size: 1rem;
       font-weight: bold;
       line-height: 1.5;
-      overflow: hidden;
-      display: -webkit-box;
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
     }
 
     .rlc-description {
-      font-size: 0.8rem;
       margin-top: 0.5rem;
-      color: #336666;
       overflow: hidden;
+      font-size: 0.8rem;
+      color: #366;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .rlc-url-container {
       display: flex;
-      align-items: center;
       gap: 0.5rem;
+      align-items: center;
       margin-top: 0.5rem;
+
       .rlc-favicon {
         margin-top: 0;
         margin-bottom: 0;
       }
+
       .rlc-url {
+        overflow: hidden;
         font-size: 0.8rem;
         color: #374151;
-        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         -webkit-line-clamp: 1;
@@ -73,14 +75,16 @@
   .rlc-image-container {
     grid-column: 2;
     aspect-ratio: 1 / 1;
-    @media (min-width: 480px) {
+
+    @media (width >= 480px) {
       aspect-ratio: 1.91 / 1;
     }
+
     .rlc-image {
-      object-fit: cover;
-      height: 100%;
       width: 100%;
+      height: 100%;
       margin: 0;
+      object-fit: cover;
       border-radius: 0 var(--border-radius) var(--border-radius) 0;
     }
   }
