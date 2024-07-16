@@ -1,11 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro'
+import LayoutTop from '../layouts/LayoutTop.astro'
 ---
 
-<Layout title="" description="index">
-  <main>
-    <h1>Welcome to <span class="text-gradient">Astro</span></h1>
+<LayoutTop title="" description="index">
+  <main class="flex h-screen flex-col items-center justify-center">
+    <h1 class="text-4xl font-bold md:text-6xl">Yui's Web</h1>
+    <a
+      class="mt-6 rounded border border-sky-500 bg-transparent px-4 py-2 font-bold text-sky-700 hover:border-transparent hover:bg-sky-500 hover:text-white"
+      href="/blog/page/1"
+      title="Blog"
+    >
+      Blog
+    </a>
   </main>
-</Layout>
-
-<style></style>
+</LayoutTop>
