@@ -4,6 +4,9 @@ interface Props {
   description: string
 }
 
+const canonicalURL = new URL(Astro.url.pathname, 'https://my-website-99a.pages.dev')
+const ogpImageURL = new URL('/ogp.png', canonicalURL)
+
 const { title, description } = Astro.props
 ---
 
@@ -15,3 +18,4 @@ const { title, description } = Astro.props
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="Hatena::Bookmark" content="nocomment" />
+<meta property="og:image" content={ogpImageURL} />
