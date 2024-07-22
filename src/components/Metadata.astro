@@ -18,5 +18,9 @@ const { title, description } = Astro.props
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="Hatena::Bookmark" content="nocomment" />
-<meta property="og:site_name" content="七羽結のウェブサイト" />
+<meta property="og:title" content={title} />
+<meta property="og:type" content="website" />
 <meta property="og:image" content={ogpImageURL} />
+<meta property="og:site_name" content="七羽結のウェブサイト" />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content="ja_JP" />
