@@ -15,7 +15,7 @@ const { description } = Astro.props
 ---
 
 <html lang="ja">
-  <head>
+  <head prefix="og: https://ogp.me/ns#">
     <Metadata title={siteName} description={description} />
     <title>{siteName}</title>
     <ViewTransitions />
