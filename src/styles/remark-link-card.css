@@ -48,6 +48,10 @@
       color: #366;
       text-overflow: ellipsis;
       white-space: nowrap;
+
+      @media (prefers-color-scheme: dark) {
+        color: #f1f5f9;
+      }
     }
 
     .rlc-url-container {
@@ -68,6 +72,10 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         -webkit-line-clamp: 1;
+
+        @media (prefers-color-scheme: dark) {
+          color: #94a3b8;
+        }
       }
     }
   }

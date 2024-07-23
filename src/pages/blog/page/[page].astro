@@ -20,7 +20,7 @@ const { page } = Astro.props
 ---
 
 <Layout title="Welcome to Astro." description="index">
-  <h2 class="my-6 text-xl font-bold md:my-8">記事一覧</h2>
+  <h2 class="my-6 text-xl font-bold md:my-8 dark:text-slate-100">記事一覧</h2>
 
   <ul>
     {
@@ -35,7 +35,7 @@ const { page } = Astro.props
     }
   </ul>
 
-  <nav class="my-4 flex items-center justify-center">
+  <nav class="my-4 flex items-center justify-center dark:text-slate-100">
     <div class="p-4">
       {
         page.url.prev ? (
