@@ -1,0 +1,29 @@
+---
+import '../styles/tableOfContents.css'
+---
+
+<nav class="toc-nav fixed bottom-10 right-0 bg-white">
+  <div class="toc-title">
+    <h2>目次</h2>
+  </div>
+  <div class="toc"></div>
+</nav>
+
+<script>
+  import * as tocbot from 'tocbot'
+
+  document.addEventListener('astro:page-load', () => {
+    if (location.pathname.includes('blog') && document.querySelector('.toc')) {
+      tocbot.init({
+        tocSelector: '.toc',
+        contentSelector: '#article',
+        activeLinkClass: 'is-active-link',
+        listClass: 'toc-list',
+        linkClass: 'toc-link',
+        headingSelector: 'h2, h3',
+        headingsOffset: 30,
+        scrollSmoothOffset: -30,
+      })
+    }
+  })
+</script>
