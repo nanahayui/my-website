@@ -1,6 +1,7 @@
 body {
   font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo,
     sans-serif;
+  color-scheme: light dark;
 }
 
 article {
@@ -12,5 +13,10 @@ article {
     font-style: normal;
     color: #9ca3af;
     text-align: center;
+  }
+
+  p:first-of-type,
+  h2:first-of-type {
+    margin-top: 0;
   }
 }
