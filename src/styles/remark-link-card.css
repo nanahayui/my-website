@@ -15,6 +15,12 @@
     background-color: #f0f9ff;
   }
 
+  @media (prefers-color-scheme: dark) {
+    &:hover {
+      background-color: #334155;
+    }
+  }
+
   @media (width >= 480px) {
     grid-template-columns: 1fr 220px;
   }
