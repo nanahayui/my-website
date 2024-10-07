@@ -20,9 +20,11 @@ const { page } = Astro.props
 ---
 
 <Layout title="Welcome to Astro." description="index">
-  <h2 class="my-6 text-xl font-bold md:my-8 dark:text-slate-100">記事一覧</h2>
+  <h2 class="mx-auto my-6 max-w-screen-md text-xl font-bold md:my-8 dark:text-slate-100">
+    記事一覧
+  </h2>
 
-  <ul>
+  <ul class="mx-auto max-w-screen-md">
     {
       page.data.map((post) => (
         <BlogCard
