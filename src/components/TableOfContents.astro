@@ -5,7 +5,7 @@ import '../styles/table-of-contents.css'
 <aside class="toc"></aside>
 
 <script>
-  import * as tocbot from 'tocbot'
+  import tocbot from 'tocbot'
 
   document.addEventListener('astro:page-load', () => {
     if (location.pathname.includes('blog') && document.querySelector('.toc')) {
