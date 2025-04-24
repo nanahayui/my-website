@@ -18,6 +18,17 @@ const apiUrl = import.meta.env.DEV
   : 'https://nanahayui.com/api/getCloudflareImages'
 
 const response = await fetch(apiUrl)
+if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`)
+}
+
+// レスポンスがJSONかどうかを確認
+const contentType = response.headers.get('content-type')
+if (!contentType || !contentType.includes('application/json')) {
+  console.log('レスポンスはJSONではありません:', await response.text())
+  throw new Error('Expected JSON response')
+}
+
 const images = (await response.json()) as CloudflareImage[]
 ---
 
