@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro'
+
+interface CloudflareImage {
+  id: string
+  uploaded: string
+  variants: string[]
+  publicUrl: string
+  thumbnailUrl: string
+  publicWidth: number
+  publicHeight: number
+  thumbnailWidth: number
+  thumbnailHeight: number
+}
+
+const apiUrl = import.meta.env.DEV
+  ? 'http://localhost:4321/api/getCloudflareImages'
+  : '/api/getCloudflareImages'
+
+const response = await fetch(apiUrl)
+const images = (await response.json()) as CloudflareImage[]
+---
+
+<Layout title="VRChat Pictures" description="VRChat Pictures">
+  <main class="container mx-auto p-4">
+    <div id="gallery" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {
+        images.map((image: any) => (
+          <a
+            href={image.publicUrl}
+            target="_blank"
+            data-pswp-width={image.publicWidth}
+            data-pswp-height={image.publicHeight}
+            class="transition-opacity duration-300 hover:opacity-70"
+          >
+            <img
+              src={image.thumbnailUrl}
+              alt="VRChat Picture"
+              class="aspect-[3/2] w-full rounded-md object-cover"
+              loading="lazy"
+            />
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initPhotoSwipe } from '../scripts/photoswipeInit'
+
+  // DOMが読み込まれたあとに初期化
+  document.addEventListener('DOMContentLoaded', initPhotoSwipe)
+</script>
