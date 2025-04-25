@@ -1,43 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro'
 
-interface CloudflareImage {
-  id: string
-  uploaded: string
-  variants: string[]
-  publicUrl: string
-  thumbnailUrl: string
-  publicWidth: number
-  publicHeight: number
-  thumbnailWidth: number
-  thumbnailHeight: number
-}
+// interface CloudflareImage {
+//   id: string
+//   uploaded: string
+//   variants: string[]
+//   publicUrl: string
+//   thumbnailUrl: string
+//   publicWidth: number
+//   publicHeight: number
+//   thumbnailWidth: number
+//   thumbnailHeight: number
+// }
 
-const apiUrl = import.meta.env.DEV
-  ? 'http://localhost:4321/api/getCloudflareImages'
-  : '/api/getCloudflareImages'
-
-console.log('API URL:', apiUrl)
-
-const response = await fetch(apiUrl)
-if (!response.ok) {
-  throw new Error(`HTTP error! status: ${response.status}`)
-}
-
-// レスポンスがJSONかどうかを確認
-const contentType = response.headers.get('content-type')
-if (!contentType || !contentType.includes('application/json')) {
-  console.log('レスポンスはJSONではありません:', await response.text())
-  throw new Error('Expected JSON response')
-}
-
-const images = (await response.json()) as CloudflareImage[]
+// const images: CloudflareImage[] = []
 ---
 
 <Layout title="VRChat Pictures" description="VRChat Pictures">
   <main class="container mx-auto p-4">
     <div id="gallery" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {
+      <!-- {
         images.map((image: any) => (
           <a
             href={image.publicUrl}
@@ -54,14 +36,14 @@ const images = (await response.json()) as CloudflareImage[]
             />
           </a>
         ))
-      }
+      } -->
     </div>
   </main>
 </Layout>
 
 <script>
-  import { initPhotoSwipe } from '../scripts/photoswipeInit'
+  // import { initPhotoSwipe } from '../scripts/photoswipeInit'
 
-  // DOMが読み込まれたあとに初期化
-  document.addEventListener('DOMContentLoaded', initPhotoSwipe)
+  // // DOMが読み込まれたあとに初期化
+  // document.addEventListener('DOMContentLoaded', initPhotoSwipe)
 </script>
