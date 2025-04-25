@@ -3,10 +3,8 @@ import cloudflare from '@astrojs/cloudflare'
 import tailwind from '@astrojs/tailwind'
 import mdx from '@astrojs/mdx'
 import icon from 'astro-icon'
-
+import react from '@astrojs/react'
 import remarkLinkCard from 'remark-link-card'
-
-import cloudflare from '@astrojs/cloudflare'
 
 // https://astro.build/config
 export default defineConfig({
