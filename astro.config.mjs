@@ -10,11 +10,10 @@ import cloudflare from '@astrojs/cloudflare'
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), mdx(), icon()],
-
+  output: 'server',
+  integrations: [tailwind(), mdx(), icon(), react()],
+  adapter: cloudflare(),
   markdown: {
-    output: 'server',
-    adapter: cloudflare(),
     shikiConfig: {
       theme: 'github-dark',
       wrap: true,
@@ -28,6 +27,4 @@ export default defineConfig({
       ],
     ],
   },
-
-  adapter: cloudflare(),
 })
