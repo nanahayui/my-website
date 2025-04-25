@@ -12,6 +12,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.5.1",
     "@astrojs/mdx": "^4.2.4",
     "@astrojs/tailwind": "^6.0.2",
