@@ -17,6 +17,8 @@ const apiUrl = import.meta.env.DEV
   ? 'http://localhost:4321/api/getCloudflareImages'
   : '/api/getCloudflareImages'
 
+console.log('API URL:', apiUrl)
+
 const response = await fetch(apiUrl)
 if (!response.ok) {
   throw new Error(`HTTP error! status: ${response.status}`)
