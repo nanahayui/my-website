@@ -4,6 +4,6 @@ import GetFromApi from '../components/GetFromApi.tsx'
 ---
 
 <Layout title="sample" description="sample">
-  <h1 class="dark:text-white">Sample Page</h1>
-  <GetFromApi client:load />
+  <h1 class="mb-4 dark:text-white">Sample Page</h1>
+  <GetFromApi client:only="react" />
 </Layout>
