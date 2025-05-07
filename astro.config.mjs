@@ -3,12 +3,11 @@ import cloudflare from '@astrojs/cloudflare'
 import tailwind from '@astrojs/tailwind'
 import mdx from '@astrojs/mdx'
 import icon from 'astro-icon'
-import react from '@astrojs/react'
 import remarkLinkCard from 'remark-link-card'
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), mdx(), icon(), react({ ssr: false })],
+  integrations: [tailwind(), mdx(), icon()],
   adapter: cloudflare(),
   markdown: {
     shikiConfig: {
