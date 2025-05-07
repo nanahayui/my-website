@@ -4,7 +4,7 @@ import { GET } from './api/hello.ts'
 
 export const prerender = false
 
-let response = await GET(Astro)
+const response = await GET(Astro)
 const data = (await response.json()) as { message: string }
 if (response.status !== 200) {
   throw new Error(`Failed to fetch data: ${response.statusText}`)
