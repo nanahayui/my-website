@@ -8,7 +8,6 @@ import remarkLinkCard from 'remark-link-card'
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
   integrations: [tailwind(), mdx(), icon(), react({ ssr: false })],
   adapter: cloudflare(),
   markdown: {
