@@ -20,20 +20,29 @@ interface CloudflareResponse {
 // サーバーサイドでデータを取得
 let images: ImageItem[] = []
 let hasError = false
+let errorMessage = ''
 
 try {
   const apiUrl = `${Astro.url.origin}/api/getGalleryImage`
+  console.log('Fetching from:', apiUrl)
+
   const response = await fetch(apiUrl)
+  console.log('Response status:', response.status)
 
   if (response.ok) {
     const data: CloudflareResponse = await response.json()
     images = data.images
+    console.log('Successfully loaded images:', images.length)
   } else {
+    const errorText = await response.text()
+    console.error('API error:', errorText)
     hasError = true
+    errorMessage = `API Error: ${response.status} - ${errorText}`
   }
 } catch (error) {
   console.error('Error fetching images:', error)
   hasError = true
+  errorMessage = error instanceof Error ? error.message : 'Unknown error'
 }
 ---
 
@@ -41,7 +50,10 @@ try {
   <main class="container mx-auto p-4">
     {
       hasError ? (
-        <div class="p-4 text-center text-white">画像の読み込みに失敗しました。</div>
+        <div class="p-4 text-center text-red-500">
+          <p>画像の読み込みに失敗しました。</p>
+          <p class="mt-2 text-sm">{errorMessage}</p>
+        </div>
       ) : (
         <div
           id="pswp-gallery"
@@ -78,7 +90,6 @@ try {
 
   // DOMが読み込まれたらPhotoSwipeを初期化
   document.addEventListener('DOMContentLoaded', () => {
-    // 少し遅延を入れて確実に初期化
     setTimeout(() => {
       initPhotoSwipe()
     }, 100)
