@@ -1,49 +1,86 @@
 ---
 import Layout from '../layouts/Layout.astro'
 
-// interface CloudflareImage {
-//   id: string
-//   uploaded: string
-//   variants: string[]
-//   publicUrl: string
-//   thumbnailUrl: string
-//   publicWidth: number
-//   publicHeight: number
-//   thumbnailWidth: number
-//   thumbnailHeight: number
-// }
+interface ImageItem {
+  name: string
+  size: number
+  uploaded: string
+  type: string
+  url: string
+  width?: number
+  height?: number
+}
 
-// const images: CloudflareImage[] = []
+interface CloudflareResponse {
+  images: ImageItem[]
+  truncated: boolean
+  cursor?: string
+}
+
+// サーバーサイドでデータを取得
+let images: ImageItem[] = []
+let hasError = false
+
+try {
+  const apiUrl = `${Astro.url.origin}/api/getGalleryImage`
+  const response = await fetch(apiUrl)
+
+  if (response.ok) {
+    const data: CloudflareResponse = await response.json()
+    images = data.images
+  } else {
+    hasError = true
+  }
+} catch (error) {
+  console.error('Error fetching images:', error)
+  hasError = true
+}
 ---
 
 <Layout title="VRChat Pictures" description="VRChat Pictures">
   <main class="container mx-auto p-4">
-    <div id="gallery" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      <!-- {
-        images.map((image: any) => (
-          <a
-            href={image.publicUrl}
-            target="_blank"
-            data-pswp-width={image.publicWidth}
-            data-pswp-height={image.publicHeight}
-            class="transition-opacity duration-300 hover:opacity-70"
-          >
-            <img
-              src={image.thumbnailUrl}
-              alt="VRChat Picture"
-              class="aspect-[3/2] w-full rounded-md object-cover"
-              loading="lazy"
-            />
-          </a>
-        ))
-      } -->
-    </div>
+    {
+      hasError ? (
+        <div class="p-4 text-center text-white">画像の読み込みに失敗しました。</div>
+      ) : (
+        <div
+          id="pswp-gallery"
+          class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
+          {images.map((image, index) => (
+            <div class="transition-opacity duration-300 hover:opacity-70">
+              <a
+                href={image.url}
+                data-pswp-width={image.width || 1920}
+                data-pswp-height={image.height || 1080}
+                data-pswp-src={image.url}
+                data-pswp-pid={index}
+                class="block"
+                onclick="return false;"
+              >
+                <img
+                  src={image.url}
+                  alt={image.name}
+                  class="aspect-[3/2] w-full rounded-md object-cover"
+                  loading="lazy"
+                />
+              </a>
+            </div>
+          ))}
+        </div>
+      )
+    }
   </main>
 </Layout>
 
 <script>
-  // import { initPhotoSwipe } from '../scripts/photoswipeInit'
+  import { initPhotoSwipe } from '../scripts/photoswipeInit'
 
-  // // DOMが読み込まれたあとに初期化
-  // document.addEventListener('DOMContentLoaded', initPhotoSwipe)
+  // DOMが読み込まれたらPhotoSwipeを初期化
+  document.addEventListener('DOMContentLoaded', () => {
+    // 少し遅延を入れて確実に初期化
+    setTimeout(() => {
+      initPhotoSwipe()
+    }, 100)
+  })
 </script>
