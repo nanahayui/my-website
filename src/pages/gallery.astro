@@ -1,44 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import { fetchGalleryImages } from '../lib/galleryService'
 
-interface ImageItem {
-  name: string
-  size: number
-  uploaded: string
-  type: string
-  url: string
-  width?: number
-  height?: number
-}
-
-interface CloudflareResponse {
-  images: ImageItem[]
-  truncated: boolean
-  cursor?: string
-}
-
-// サーバーサイドでデータを取得
-let images: ImageItem[] = []
+// サーバーサイドで直接データを取得
+let images: any[] = []
 let hasError = false
 let errorMessage = ''
 
 try {
-  const apiUrl = `${Astro.url.origin}/api/getGalleryImage`
-  console.log('Fetching from:', apiUrl)
-
-  const response = await fetch(apiUrl)
-  console.log('Response status:', response.status)
-
-  if (response.ok) {
-    const data: CloudflareResponse = await response.json()
-    images = data.images
-    console.log('Successfully loaded images:', images.length)
-  } else {
-    const errorText = await response.text()
-    console.error('API error:', errorText)
-    hasError = true
-    errorMessage = `API Error: ${response.status} - ${errorText}`
-  }
+  const data = await fetchGalleryImages()
+  images = data.images
+  console.log('Successfully loaded images:', images.length)
 } catch (error) {
   console.error('Error fetching images:', error)
   hasError = true
@@ -88,7 +60,6 @@ try {
 <script>
   import { initPhotoSwipe } from '../scripts/photoswipeInit'
 
-  // DOMが読み込まれたらPhotoSwipeを初期化
   document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       initPhotoSwipe()
