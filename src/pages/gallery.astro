@@ -2,17 +2,25 @@
 import Layout from '../layouts/Layout.astro'
 import { fetchGalleryImages } from '../lib/galleryService'
 
-// サーバーサイドで直接データを取得
-let images: any[] = []
+interface ImageItem {
+  name: string
+  size: number
+  uploaded: string
+  type: string
+  url: string
+  width?: number
+  height?: number
+}
+
+// サーバーサイドでデータを取得
+let images: ImageItem[] = []
 let hasError = false
 let errorMessage = ''
 
 try {
   const data = await fetchGalleryImages()
   images = data.images
-  console.log('Successfully loaded images:', images.length)
 } catch (error) {
-  console.error('Error fetching images:', error)
   hasError = true
   errorMessage = error instanceof Error ? error.message : 'Unknown error'
 }
@@ -61,8 +69,6 @@ try {
   import { initPhotoSwipe } from '../scripts/photoswipeInit'
 
   document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      initPhotoSwipe()
-    }, 100)
+    initPhotoSwipe()
   })
 </script>
