@@ -36,30 +36,34 @@ try {
           <p class="mt-2 text-sm">{errorMessage}</p>
         </div>
       ) : (
-        <div
-          id="pswp-gallery"
-          class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        >
-          {images.map((image, index) => (
-            <div class="transition-opacity duration-300 hover:opacity-70">
-              <a
-                href={image.url}
-                data-pswp-width={image.width || 1920}
-                data-pswp-height={image.height || 1080}
-                data-pswp-src={image.url}
-                data-pswp-pid={index}
-                class="block"
-                onclick="return false;"
-              >
-                <img
-                  src={image.url}
-                  alt={image.name}
-                  class="aspect-[3/2] w-full rounded-md object-cover"
-                  loading="lazy"
-                />
-              </a>
-            </div>
-          ))}
+        <div id="pswp-gallery" class="masonry-grid">
+          {images.map((image, index) => {
+            const aspectRatio = (image.width || 1920) / (image.height || 1080)
+            const isWide = aspectRatio > 1.5
+            const isPanoramic = aspectRatio > 2.5
+
+            return (
+              <div class={`masonry-item ${isPanoramic ? 'panoramic' : isWide ? 'wide' : ''}`}>
+                <a
+                  href={image.url}
+                  data-pswp-width={image.width || 1920}
+                  data-pswp-height={image.height || 1080}
+                  data-pswp-src={image.url}
+                  data-pswp-pid={index}
+                  class="block"
+                  onclick="return false;"
+                >
+                  <img
+                    src={image.url}
+                    alt={image.name}
+                    class="w-full rounded-md object-cover transition-opacity duration-300 hover:opacity-70"
+                    loading="lazy"
+                    style={`aspect-ratio: ${aspectRatio}`}
+                  />
+                </a>
+              </div>
+            )
+          })}
         </div>
       )
     }
@@ -73,3 +77,86 @@ try {
     initPhotoSwipe()
   })
 </script>
+
+<style>
+  .masonry-grid {
+    column-count: 1;
+    column-gap: 1rem;
+    padding: 0;
+  }
+
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    display: inline-block;
+    width: 100%;
+  }
+
+  /* 横長画像の調整 */
+  .masonry-item.wide img {
+    min-height: 260px; /* さらに増加 */
+  }
+
+  /* パノラマ画像の調整 */
+  .masonry-item.panoramic img {
+    min-height: 200px; /* さらに増加 */
+  }
+
+  /* レスポンシブ対応 */
+  @media (min-width: 640px) {
+    .masonry-grid {
+      column-count: 1; /* 変更なし */
+    }
+
+    /* より大きな画面では横長画像をより目立たせる */
+    .masonry-item.wide img {
+      min-height: 280px; /* 240pxから280pxに増加 */
+    }
+
+    .masonry-item.panoramic img {
+      min-height: 220px; /* 180pxから220pxに増加 */
+    }
+  }
+
+  @media (min-width: 768px) {
+    .masonry-grid {
+      column-count: 1; /* 2から1に変更 */
+    }
+
+    .masonry-item.wide img {
+      min-height: 300px; /* 220pxから300pxに増加 */
+    }
+
+    .masonry-item.panoramic img {
+      min-height: 240px; /* 160pxから240pxに増加 */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .masonry-grid {
+      column-count: 2; /* 3から2に変更 */
+    }
+
+    .masonry-item.wide img {
+      min-height: 280px; /* 200pxから280pxに増加 */
+    }
+
+    .masonry-item.panoramic img {
+      min-height: 220px; /* 140pxから220pxに増加 */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .masonry-grid {
+      column-count: 3; /* 4から3に変更 */
+    }
+
+    .masonry-item.wide img {
+      min-height: 260px; /* 180pxから260pxに増加 */
+    }
+
+    .masonry-item.panoramic img {
+      min-height: 200px; /* 120pxから200pxに増加 */
+    }
+  }
+</style>
