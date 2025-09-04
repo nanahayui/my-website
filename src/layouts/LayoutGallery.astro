@@ -1,0 +1,35 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import Metadata from '../components/Metadata.astro'
+import Header from '../components/Header.astro'
+import GalleryContainer from '../components/GalleryContainer.astro'
+import Footer from '../components/Footer.astro'
+
+import '../styles/global.css'
+import '../styles/remark-link-card.css'
+
+interface Props {
+  title: string
+  description: string
+}
+
+const siteName = "Yui's Web"
+const { title, description } = Astro.props
+---
+
+<html lang="ja">
+  <head prefix="og: https://ogp.me/ns#">
+    <Metadata title={title} description={description} />
+    <title>{`${title ? title + ' |' : ''} ${siteName}`}</title>
+    <ClientRouter />
+  </head>
+  <body class="dark:bg-slate-800">
+    <Header />
+    <main>
+      <GalleryContainer>
+        <slot />
+      </GalleryContainer>
+    </main>
+    <Footer />
+  </body>
+</html>
