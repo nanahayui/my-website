@@ -71,7 +71,115 @@ try {
 <script>
   import { initPhotoSwipe } from '../scripts/photoswipeInit'
 
+  class MasonryLayout {
+    private container: HTMLElement | null = null
+    private columnHeights: number[] = []
+    private columns = 2
+    private gap = 12
+
+    constructor() {
+      this.init()
+    }
+
+    private init() {
+      this.container = document.querySelector('.masonry-grid')
+      if (!this.container) return
+
+      this.updateColumns()
+      this.layout()
+
+      window.addEventListener('resize', () => {
+        this.updateColumns()
+        this.layout()
+      })
+    }
+
+    private updateColumns() {
+      const width = window.innerWidth
+      if (width >= 1024) {
+        this.columns = 3
+        this.gap = 16
+      } else if (width >= 640) {
+        this.columns = 2
+        this.gap = 12
+      } else {
+        this.columns = 2
+        this.gap = 12
+      }
+      this.columnHeights = new Array(this.columns).fill(0)
+    }
+
+    private layout() {
+      if (!this.container) return
+
+      const items = this.container.querySelectorAll('.masonry-item') as NodeListOf<HTMLElement>
+      const containerWidth = this.container.offsetWidth
+      const itemWidth = (containerWidth - (this.columns - 1) * this.gap) / this.columns
+
+      items.forEach((item, index) => {
+        const shortestColumn = this.columnHeights.indexOf(Math.min(...this.columnHeights))
+        const x = shortestColumn * (itemWidth + this.gap)
+        const y = this.columnHeights[shortestColumn]
+
+        item.style.position = 'absolute'
+        item.style.left = `${x}px`
+        item.style.top = `${y}px`
+        item.style.width = `${itemWidth}px`
+
+        // 画像の読み込み完了後に高さを取得
+        const img = item.querySelector('img') as HTMLImageElement
+        if (img) {
+          if (img.complete) {
+            this.updateItemHeight(item, shortestColumn)
+          } else {
+            img.onload = () => {
+              this.updateItemHeight(item, shortestColumn)
+            }
+          }
+        }
+      })
+    }
+
+    private updateItemHeight(item: HTMLElement, columnIndex: number) {
+      const height = item.offsetHeight
+      this.columnHeights[columnIndex] += height + this.gap
+
+      // コンテナの高さを更新
+      if (this.container) {
+        this.container.style.height = `${Math.max(...this.columnHeights)}px`
+      }
+    }
+
+    public relayout() {
+      this.columnHeights = new Array(this.columns).fill(0)
+      this.layout()
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     initPhotoSwipe()
+
+    // Masonryレイアウトを初期化
+    const masonry = new MasonryLayout()
+
+    // 画像読み込み完了後に再レイアウト
+    const images = document.querySelectorAll('.masonry-item img') as NodeListOf<HTMLImageElement>
+    let loadedCount = 0
+
+    images.forEach((img) => {
+      if (img.complete) {
+        loadedCount++
+        if (loadedCount === images.length) {
+          setTimeout(() => masonry.relayout(), 100)
+        }
+      } else {
+        img.addEventListener('load', () => {
+          loadedCount++
+          if (loadedCount === images.length) {
+            setTimeout(() => masonry.relayout(), 100)
+          }
+        })
+      }
+    })
   })
 </script>

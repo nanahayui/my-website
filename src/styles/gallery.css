@@ -1,15 +1,13 @@
-/* ギャラリーMasonryレイアウト */
+/* ギャラリーグリッドレイアウト */
 .masonry-grid {
-  column-count: 2;
-  column-gap: 0.75rem;
-  padding: 0;
+  width: 100%;
+  position: relative;
 }
 
 .masonry-item {
-  break-inside: avoid;
-  margin-bottom: 0.5rem;
-  display: inline-block;
-  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
 }
 
 /* 横長画像の最小高さ調整 */
@@ -24,15 +22,6 @@
 
 /* レスポンシブ対応 */
 @media (min-width: 640px) {
-  .masonry-grid {
-    column-count: 2;
-    column-gap: 0.75rem;
-  }
-
-  .masonry-item {
-    margin-bottom: 0.75rem;
-  }
-
   .masonry-item.wide img {
     min-height: 180px;
   }
@@ -43,15 +32,6 @@
 }
 
 @media (min-width: 768px) {
-  .masonry-grid {
-    column-count: 2;
-    column-gap: 1rem;
-  }
-
-  .masonry-item {
-    margin-bottom: 1rem;
-  }
-
   .masonry-item.wide img {
     min-height: 220px;
   }
@@ -62,10 +42,6 @@
 }
 
 @media (min-width: 1024px) {
-  .masonry-grid {
-    column-count: 3;
-  }
-
   .masonry-item.wide img {
     min-height: 200px;
   }
@@ -76,10 +52,6 @@
 }
 
 @media (min-width: 1280px) {
-  .masonry-grid {
-    column-count: 3;
-  }
-
   .masonry-item.wide img {
     min-height: 220px;
   }
