@@ -1,4 +1,5 @@
 import probe from 'probe-image-size'
+import { imageSizeCache } from './imageSizeCache'
 
 interface ImageItem {
   name: string
@@ -16,32 +17,48 @@ interface CloudflareResponse {
   cursor?: string
 }
 
-// 画像サイズを取得する関数
+// 画像サイズを取得する関数（キャッシュ対応）
 async function getImageSize(url: string): Promise<{ width: number; height: number }> {
+  // まずキャッシュを確認
+  const cachedDimensions = imageSizeCache.get(url)
+  if (cachedDimensions) {
+    return cachedDimensions
+  }
+
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000)
+    const timeoutId = setTimeout(() => controller.abort(), 5000) // 10秒から5秒に短縮
 
     const result = await probe(url, { signal: controller.signal })
     clearTimeout(timeoutId)
 
-    return {
+    const dimensions = {
       width: result.width,
       height: result.height,
     }
+
+    // 結果をキャッシュに保存
+    imageSizeCache.set(url, dimensions)
+
+    return dimensions
   } catch (error) {
-    return {
+    const defaultDimensions = {
       width: 1920,
       height: 1080,
     }
+
+    // デフォルト値もキャッシュに保存（エラーを避けるため）
+    imageSizeCache.set(url, defaultDimensions)
+
+    return defaultDimensions
   }
 }
 
-// 並行処理数を制限する関数
+// 並行処理数を制限する関数（最適化済み）
 async function processImagesInBatches<T, R>(
   items: T[],
   processor: (item: T) => Promise<R>,
-  batchSize: number = 5,
+  batchSize: number = 10, // 5から10に増加
 ): Promise<R[]> {
   const results: R[] = []
 
@@ -79,7 +96,7 @@ export async function fetchGalleryImages(cursor?: string): Promise<CloudflareRes
 
     const data: CloudflareResponse = await response.json()
 
-    // 各画像のサイズをバッチ処理で取得
+    // 各画像のサイズをバッチ処理で取得（キャッシュ活用）
     const imagesWithSizes = await processImagesInBatches(
       data.images,
       async (image) => {
@@ -90,7 +107,7 @@ export async function fetchGalleryImages(cursor?: string): Promise<CloudflareRes
           height: dimensions.height,
         }
       },
-      5,
+      10, // バッチサイズを10に増加
     )
 
     return {
@@ -99,5 +116,13 @@ export async function fetchGalleryImages(cursor?: string): Promise<CloudflareRes
     }
   } catch (error) {
     throw error
+  }
+}
+
+// キャッシュ統計取得用のユーティリティ関数
+export function getCacheStats() {
+  return {
+    size: imageSizeCache.size(),
+    clear: () => imageSizeCache.clear(),
   }
 }
