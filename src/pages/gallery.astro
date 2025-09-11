@@ -1,5 +1,6 @@
 ---
 import LayoutGallery from '../layouts/LayoutGallery.astro'
+import ImageSkeleton from '../components/ImageSkeleton.astro'
 import { fetchGalleryImages } from '../lib/galleryService'
 
 interface ImageItem {
@@ -49,13 +50,14 @@ try {
                 data-pswp-height={image.height || 1080}
                 data-pswp-src={image.url}
                 data-pswp-pid={index}
-                class="block"
+                class="relative block"
                 onclick="return false;"
               >
+                <ImageSkeleton aspectRatio={aspectRatio} class="skeleton-placeholder" />
                 <img
                   src={image.url}
                   alt={image.name}
-                  class="w-full rounded-md object-cover transition-opacity duration-300 hover:opacity-70"
+                  class="actual-image absolute inset-0 w-full rounded-md object-cover opacity-0 transition-opacity duration-300 hover:opacity-70"
                   loading="lazy"
                   style={`aspect-ratio: ${aspectRatio}`}
                 />
@@ -116,7 +118,7 @@ try {
       const containerWidth = this.container.offsetWidth
       const itemWidth = (containerWidth - (this.columns - 1) * this.gap) / this.columns
 
-      items.forEach((item, index) => {
+      items.forEach((item) => {
         const shortestColumn = this.columnHeights.indexOf(Math.min(...this.columnHeights))
         const x = shortestColumn * (itemWidth + this.gap)
         const y = this.columnHeights[shortestColumn]
@@ -126,23 +128,15 @@ try {
         item.style.top = `${y}px`
         item.style.width = `${itemWidth}px`
 
-        // 画像の読み込み完了後に高さを取得
-        const img = item.querySelector('img') as HTMLImageElement
-        if (img) {
-          if (img.complete) {
-            this.updateItemHeight(item, shortestColumn)
-          } else {
-            img.onload = () => {
-              this.updateItemHeight(item, shortestColumn)
-            }
-          }
+        // Skeletonの高さを使用してレイアウトを計算
+        const skeleton = item.querySelector('.skeleton-placeholder') as HTMLElement
+        if (skeleton) {
+          // Skeletonのアスペクト比から高さを計算
+          const aspectRatio = parseFloat(skeleton.dataset.aspectRatio || '1.5')
+          const height = itemWidth / aspectRatio
+          this.columnHeights[shortestColumn] += height + this.gap
         }
       })
-    }
-
-    private updateItemHeight(item: HTMLElement, columnIndex: number) {
-      const height = item.offsetHeight
-      this.columnHeights[columnIndex] += height + this.gap
 
       // コンテナの高さを更新
       if (this.container) {
@@ -156,30 +150,65 @@ try {
     }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  // 画像読み込み処理を関数化
+  function initializeGallery() {
+    // DOM要素が存在することを確認
+    const galleryContainer = document.querySelector('.masonry-grid')
+    if (!galleryContainer) {
+      // DOM要素がまだ存在しない場合は少し待つ
+      setTimeout(initializeGallery, 50)
+      return
+    }
+
     initPhotoSwipe()
 
-    // Masonryレイアウトを初期化
+    // Masonryレイアウトを初期化（Skeletonベース）
     const masonry = new MasonryLayout()
 
-    // 画像読み込み完了後に再レイアウト
-    const images = document.querySelectorAll('.masonry-item img') as NodeListOf<HTMLImageElement>
-    let loadedCount = 0
+    // 画像読み込み完了時の処理
+    const handleImageLoad = (img: HTMLImageElement) => {
+      const container = img.closest('.masonry-item')
+      const skeleton = container?.querySelector('.skeleton-placeholder') as HTMLElement
+
+      if (skeleton) {
+        skeleton.style.display = 'none'
+      }
+      img.style.opacity = '1'
+    }
+
+    // 画像読み込み処理
+    const images = document.querySelectorAll(
+      '.masonry-item img.actual-image',
+    ) as NodeListOf<HTMLImageElement>
 
     images.forEach((img) => {
-      if (img.complete) {
-        loadedCount++
-        if (loadedCount === images.length) {
-          setTimeout(() => masonry.relayout(), 100)
-        }
+      if (img.complete && img.naturalHeight !== 0) {
+        handleImageLoad(img)
       } else {
         img.addEventListener('load', () => {
-          loadedCount++
-          if (loadedCount === images.length) {
-            setTimeout(() => masonry.relayout(), 100)
+          handleImageLoad(img)
+        })
+
+        img.addEventListener('error', () => {
+          // エラー時もSkeletonを非表示にする
+          const container = img.closest('.masonry-item')
+          const skeleton = container?.querySelector('.skeleton-placeholder') as HTMLElement
+          if (skeleton) {
+            skeleton.style.display = 'none'
           }
         })
       }
     })
-  })
+  }
+
+  // 初期化処理
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeGallery)
+  } else {
+    // DOM が既に読み込まれている場合（ページ遷移時など）
+    initializeGallery()
+  }
+
+  // Astroのページ遷移に対応
+  document.addEventListener('astro:page-load', initializeGallery)
 </script>
