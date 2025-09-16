@@ -24,6 +24,35 @@ export function initPhotoSwipe() {
     pswpModule: () => import('photoswipe'),
   })
 
+  // キャプション機能を追加
+  lightbox.on('uiRegister', function () {
+    if (lightbox?.pswp?.ui) {
+      lightbox.pswp.ui.registerElement({
+        name: 'custom-caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'root',
+        html: 'サンプルキャプション',
+        onInit: (el, pswp) => {
+          lightbox?.pswp?.on('change', () => {
+            // 2行のアイコン付きキャプションを設定
+            const captionHTML = `
+              <div class="caption-line">
+                <img src="/icons/icon_world.svg" alt="World" class="caption-icon" />
+                <span>サンプルワールド名</span>
+              </div>
+              <div class="caption-line">
+                <img src="/icons/icon_people.svg" alt="People" class="caption-icon" />
+                <span>サンプル人数情報</span>
+              </div>
+            `
+            el.innerHTML = captionHTML
+          })
+        },
+      })
+    }
+  })
+
   lightbox.init()
 }
 

@@ -60,3 +60,43 @@
     min-height: 180px;
   }
 }
+
+/* PhotoSwipe キャプションスタイル */
+.pswp__custom-caption {
+  background: rgba(30, 41, 59, 0.6);
+  font-size: 14px;
+  color: #fff;
+  width: calc(100% - 32px);
+  max-width: 400px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  text-align: left;
+  line-height: 1.4;
+}
+
+.pswp__custom-caption .caption-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pswp__custom-caption .caption-line:last-child {
+  margin-bottom: 0;
+}
+
+.pswp__custom-caption .caption-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1); /* アイコンを白色にする */
+}
+
+.pswp__custom-caption a {
+  color: #fff;
+  text-decoration: underline;
+}
