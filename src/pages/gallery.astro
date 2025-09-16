@@ -53,7 +53,12 @@ try {
                 class="relative block"
                 onclick="return false;"
               >
-                <ImageSkeleton aspectRatio={aspectRatio} class="skeleton-placeholder" />
+                <ImageSkeleton
+                  aspectRatio={aspectRatio}
+                  class="skeleton-placeholder"
+                  isWide={isWide}
+                  isPanoramic={isPanoramic}
+                />
                 <img
                   src={image.url}
                   alt={image.name}
@@ -133,7 +138,30 @@ try {
         if (skeleton) {
           // Skeletonのアスペクト比から高さを計算
           const aspectRatio = parseFloat(skeleton.dataset.aspectRatio || '1.5')
-          const height = itemWidth / aspectRatio
+          let height = itemWidth / aspectRatio
+
+          // 横長画像の場合、最小高さを適用
+          if (item.classList.contains('wide') || item.classList.contains('panoramic')) {
+            let minHeight = 140 // デフォルト（スマホサイズ）
+
+            // レスポンシブ対応の最小高さ
+            const width = window.innerWidth
+            if (width >= 1280) {
+              minHeight = item.classList.contains('panoramic') ? 180 : 220
+            } else if (width >= 1024) {
+              minHeight = item.classList.contains('panoramic') ? 160 : 200
+            } else if (width >= 768) {
+              minHeight = item.classList.contains('panoramic') ? 180 : 220
+            } else if (width >= 640) {
+              minHeight = item.classList.contains('panoramic') ? 140 : 180
+            } else {
+              minHeight = item.classList.contains('panoramic') ? 100 : 140
+            }
+
+            // 計算された高さと最小高さの大きい方を使用
+            height = Math.max(height, minHeight)
+          }
+
           this.columnHeights[shortestColumn] += height + this.gap
         }
       })

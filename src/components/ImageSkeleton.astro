@@ -2,13 +2,20 @@
 export interface Props {
   aspectRatio?: number
   class?: string
+  isWide?: boolean
+  isPanoramic?: boolean
 }
 
-const { aspectRatio = 1.5, class: className = '' } = Astro.props
+const {
+  aspectRatio = 1.5,
+  class: className = '',
+  isWide = false,
+  isPanoramic = false,
+} = Astro.props
 ---
 
 <div
-  class={`skeleton-container ${className}`}
+  class={`skeleton-container ${className} ${isPanoramic ? 'panoramic' : isWide ? 'wide' : ''}`}
   style={`aspect-ratio: ${aspectRatio}`}
   data-aspect-ratio={aspectRatio}
 >
@@ -22,6 +29,56 @@ const { aspectRatio = 1.5, class: className = '' } = Astro.props
     border-radius: 6px;
     overflow: hidden;
     width: 100%;
+  }
+
+  /* 横長画像の最小高さ調整（実際の画像と同じ設定） */
+  .skeleton-container.wide {
+    min-height: 140px;
+  }
+
+  .skeleton-container.panoramic {
+    min-height: 100px;
+  }
+
+  /* レスポンシブ対応 */
+  @media (min-width: 640px) {
+    .skeleton-container.wide {
+      min-height: 180px;
+    }
+
+    .skeleton-container.panoramic {
+      min-height: 140px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .skeleton-container.wide {
+      min-height: 220px;
+    }
+
+    .skeleton-container.panoramic {
+      min-height: 180px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .skeleton-container.wide {
+      min-height: 200px;
+    }
+
+    .skeleton-container.panoramic {
+      min-height: 160px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .skeleton-container.wide {
+      min-height: 220px;
+    }
+
+    .skeleton-container.panoramic {
+      min-height: 180px;
+    }
   }
 
   .skeleton-shimmer {
