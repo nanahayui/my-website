@@ -49,6 +49,15 @@ export function initPhotoSwipe() {
             // キャプションデータを取得
             const captionData = getCaptionData(fileName)
 
+            // 両方とも空の場合はキャプション要素を非表示にする
+            if (!captionData.world && !captionData.people) {
+              el.style.display = 'none'
+              return
+            }
+
+            // どちらかがある場合はキャプション要素を表示状態にする
+            el.style.display = 'block'
+
             // キャプションHTMLを構築
             let captionHTML = ''
 
@@ -72,7 +81,6 @@ export function initPhotoSwipe() {
               `
             }
 
-            // どちらも空の場合は何も表示しない
             el.innerHTML = captionHTML
           })
         },
